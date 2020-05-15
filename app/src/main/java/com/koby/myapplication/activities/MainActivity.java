@@ -102,7 +102,11 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String s) {
-                cocktailViewModel.getFavoriteCocktails().removeObservers(MainActivity.this);
+
+                //Stop the observe but not painting star
+                cocktailViewModel.getPopularCocktails().removeObservers(MainActivity.this);
+
+
                 cocktailViewModel.getSearchedCocktail(s)
                         .observe(MainActivity.this, listResource -> {
                     adapter.setCocktails(listResource.data);

@@ -25,15 +25,15 @@ public class CocktailViewModel extends AndroidViewModel {
     public CocktailViewModel(@NonNull Application application) {
         super(application);
         this.cocktailRepository = CocktailRepository.getInstance(application);
+        initPopularCocktails();
     }
 
-    //Get popular cocktails
-    public LiveData<Resource<List<Cocktail>>> getPopularCocktails() {
+    private void initPopularCocktails() {
         result = cocktailRepository.getPopularCocktails();
         if (result.getValue() != null) {
             switch (result.getValue().status) {
                 case SUCCESS:
-                    return result;
+//                    return result;
                 case LOADING:
                     Log.d(TAG, "getPopularCocktails: loading");
                 case ERROR:
@@ -41,7 +41,10 @@ public class CocktailViewModel extends AndroidViewModel {
                     break;
             }
         }
+    }
 
+    //Get popular cocktails
+    public LiveData<Resource<List<Cocktail>>> getPopularCocktails() {
         return result;
     }
 
