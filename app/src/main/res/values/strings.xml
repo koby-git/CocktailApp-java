@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">CocktailApp</string>
+    <string name="popular_cocktails">Popular coctails</string>
+    <string name="favorite_cocktails">Favorite cocktails</string>
+    <string name="search_cocktails">Search cocktails</string>
+    <string name="cocktail">cocktail</string>
+</resources>
