@@ -21,21 +21,16 @@ import retrofit2.http.GET;
 @Dao
 public interface CocktailDao {
 
-    @Insert(onConflict = OnConflictStrategy.ABORT)
+    @Insert()
     void insert(Cocktail cocktail);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     long[] insert(Cocktail... cocktail);
 
-    @Update
-    int update(Cocktail... cocktails);
-
     @Update()
     int update(Cocktail cocktail);
 
-//    @Query("SELECT * from cocktail_table Where id = :id")
-//    Cocktail getCocktail(String id);
-
+    //TODO:add delete function
     @Delete
     void delete(Cocktail cocktail);
 
@@ -47,14 +42,8 @@ public interface CocktailDao {
             "WHERE id = :cocktail_id")
     void update(String cocktail_id, String name, String imageUri,String instruction);
 
-    @Query("SELECT * FROM cocktail_table")
-    LiveData<List<Cocktail>> getAllCocktails();
-
     @Query("SELECT * FROM cocktail_table WHERE isFavorite = 1")
     LiveData<List<Cocktail>> getFavoriteCocktails();
-
-    @Query("SELECT * FROM cocktail_table WHERE name LIKE '%' || :query || '%' ")
-    LiveData<List<Cocktail>> getCocktails(String query);
 
     @Query("SELECT * FROM cocktail_table WHERE id = :cocktailId")
     Cocktail getCocktail(String cocktailId);

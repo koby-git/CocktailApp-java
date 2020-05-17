@@ -43,7 +43,6 @@ public class CocktailRepository {
 
         return new NetworkBoundResource<List<Cocktail>, CocktailResponse>(){
 
-            //No changes from old version
             @Override
             protected void saveCallResult(@NonNull CocktailResponse item) {
 
@@ -70,20 +69,17 @@ public class CocktailRepository {
                 });
             }
 
-            //No changes from old version
             @Override
             protected boolean shouldFetch(@Nullable List<Cocktail> data) {
                 return true;
             }
 
-            //No changes from old version
             @NonNull
             @Override
             protected LiveData<List<Cocktail>> loadFromDb() {
-                return cocktailDao.getAllCocktails();
+                return cocktailDao.getPopularCocktails();
             }
 
-            //No changes from old version
             @NonNull
             @Override
             protected LiveData<ApiResponse<CocktailResponse>> createCall() {
@@ -138,13 +134,6 @@ public class CocktailRepository {
         return results;
     }
 
-
-
-    //CRUD
-    public void insertCocktail(Cocktail cocktail) {
-        AppExecutor.getInstance().diskIO().execute(() ->
-                cocktailDao.insert(cocktail));
-    }
     public void updateCocktail(Cocktail cocktail) {
         AppExecutor.getInstance().diskIO().execute(() -> {
             int i = cocktailDao.update(cocktail);
@@ -155,30 +144,5 @@ public class CocktailRepository {
         });
     }
 
-    //Set cocktails to cache
-    private void saveCallResult(@NonNull CocktailResponse item) {
-
-        AppExecutor.getInstance().diskIO().execute(() -> {
-
-            if (item.getCocktails() != null) { // recipe list will be null if the api key is expired
-                Cocktail[] cocktails = new Cocktail[item.getCocktails().size()];
-                int index = 0;
-                for (long rowid : cocktailDao.insert((Cocktail[]) (item.getCocktails().toArray(cocktails)))) {
-                    if (rowid == -1) {
-                        Log.d(TAG, "saveCallResult: CONFLICT... This recipe is already in the cache");
-                        // if the recipe already exists... I don't want to set the ingredients or timestamp b/c
-                        // they will be erased
-
-                        cocktailDao.update(cocktails[index].getId()+"",
-                                cocktails[index].getName(),
-                                cocktails[index].getImageUri(),
-                                cocktails[index].getInstruction());
-
-                        index++;
-                    }
-                }
-            }
-        });
-    }
 }
 

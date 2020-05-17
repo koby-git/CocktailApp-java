@@ -14,24 +14,20 @@ import com.koby.myapplication.model.Cocktail;
 @Database(entities = Cocktail.class,version = 4)
 public abstract class CocktailDatabase extends RoomDatabase {
 
+    private static final String DATABASE_NAME = "cocktail_database";
+
     private static CocktailDatabase instance;
-    public abstract CocktailDao getCocktailDao();
+
     public static synchronized CocktailDatabase getInstance(Context context){
         if (instance == null){
-            instance = Room.databaseBuilder(context.getApplicationContext(),
-                    CocktailDatabase.class, "cocktail_database")
-                    .fallbackToDestructiveMigration()
-                    .addCallback(roomCallback)
-                    .build();
+            instance = Room.databaseBuilder(
+                    context.getApplicationContext(),
+                    CocktailDatabase.class,
+                    DATABASE_NAME
+            ).build();
         }
         return instance;
     }
 
-    private static RoomDatabase.Callback roomCallback = new RoomDatabase.Callback() {
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-
-        }
-    };
+    public abstract CocktailDao getCocktailDao();
 }

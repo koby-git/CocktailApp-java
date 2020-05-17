@@ -16,13 +16,18 @@ import com.koby.myapplication.R;
 
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CocktailAdapter extends RecyclerView.Adapter<CocktailAdapter.CocktailHolder> {
 
+    //Vars
     private List<Cocktail> cocktails;
     private Context context;
     private OnStarClickListener starClickListener;
     private OnCocktailClickListener cocktailClickListener;
 
+    //Star click listener
     public void setOnStarClickListener(OnStarClickListener starClickListener){
         this.starClickListener = starClickListener;
     }
@@ -30,6 +35,7 @@ public class CocktailAdapter extends RecyclerView.Adapter<CocktailAdapter.Cockta
         void onStarClick(Cocktail cocktail);
     }
 
+    //Cocktail click listener
     public void setOnCocktailClickListener(OnCocktailClickListener cocktailClickListener){
         this.cocktailClickListener = cocktailClickListener;
     }
@@ -37,11 +43,7 @@ public class CocktailAdapter extends RecyclerView.Adapter<CocktailAdapter.Cockta
         void onCocktailClick(Cocktail cocktail);
     }
 
-
-
-
-
-
+    //Constructor
     public CocktailAdapter(List<Cocktail> cocktails, Context context) {
         this.cocktails = cocktails;
         this.context = context;
@@ -91,15 +93,19 @@ public class CocktailAdapter extends RecyclerView.Adapter<CocktailAdapter.Cockta
 
     public class CocktailHolder extends RecyclerView.ViewHolder{
 
-        private TextView cocktailName;
-        private ImageView cocktailImage;
-        private ImageView cocktailStar;
+        @BindView(R.id.cocktail_item_name)
+        TextView cocktailName;
+
+        @BindView(R.id.cocktail_item_image)
+        ImageView cocktailImage;
+
+        @BindView(R.id.cocktail_item_star)
+        ImageView cocktailStar;
 
         public CocktailHolder(@NonNull View itemView) {
             super(itemView);
-            cocktailName = itemView.findViewById(R.id.cocktail_item_name);
-            cocktailImage = itemView.findViewById(R.id.cocktail_item_image);
-            cocktailStar = itemView.findViewById(R.id.cocktail_item_star);
+
+            ButterKnife.bind(this,itemView);
 
             cocktailStar.setOnClickListener(view -> {
                 int position = getAdapterPosition();

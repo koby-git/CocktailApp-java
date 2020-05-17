@@ -2,7 +2,6 @@ package com.koby.myapplication.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
@@ -45,7 +44,6 @@ public class CocktailActivity extends AppCompatActivity {
                 .into(cocktailImage);
 
         cocktailName.setText(cocktail.getName());
-        cocktailName.setPaintFlags(cocktailName.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         cocktailInstruction.setText(cocktail.getInstruction());
 

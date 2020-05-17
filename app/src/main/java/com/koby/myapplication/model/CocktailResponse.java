@@ -6,7 +6,6 @@ import java.util.List;
 
 public class CocktailResponse {
 
-    //TODO: CHANGE TO DRENKS
     @SerializedName("drinks")
     List<Cocktail> cocktails;
 

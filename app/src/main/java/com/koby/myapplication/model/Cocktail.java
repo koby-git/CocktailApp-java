@@ -1,15 +1,11 @@
 package com.koby.myapplication.model;
 
-import android.net.Uri;
-
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity(tableName = "cocktail_table")
 public class Cocktail implements Serializable {
@@ -39,7 +35,6 @@ public class Cocktail implements Serializable {
         this.tags = tags;
         this.glass = glass;
     }
-
 
     public String getGlass() {
         return glass;

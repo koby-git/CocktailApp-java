@@ -17,31 +17,19 @@ import java.util.List;
 
 public class CocktailViewModel extends AndroidViewModel {
 
+    private static final String TAG = "CocktailViewModel";
+
     //Vars
     private CocktailRepository cocktailRepository;
-    private static final String TAG = "CocktailViewModel";
-    LiveData<Resource<List<Cocktail>>> result;
+    private LiveData<Resource<List<Cocktail>>> result;
+
     //Constructor
     public CocktailViewModel(@NonNull Application application) {
         super(application);
         this.cocktailRepository = CocktailRepository.getInstance(application);
-        initPopularCocktails();
+        this.result = cocktailRepository.getPopularCocktails();
     }
 
-    private void initPopularCocktails() {
-        result = cocktailRepository.getPopularCocktails();
-        if (result.getValue() != null) {
-            switch (result.getValue().status) {
-                case SUCCESS:
-//                    return result;
-                case LOADING:
-                    Log.d(TAG, "getPopularCocktails: loading");
-                case ERROR:
-                    Log.d(TAG, "getPopularCocktails: " + result.getValue().message);
-                    break;
-            }
-        }
-    }
 
     //Get popular cocktails
     public LiveData<Resource<List<Cocktail>>> getPopularCocktails() {
@@ -50,23 +38,7 @@ public class CocktailViewModel extends AndroidViewModel {
 
     //Get favorite cocktails
     public LiveData<Resource<List<Cocktail>>> getFavoriteCocktails() {
-        LiveData<Resource<List<Cocktail>>> result = cocktailRepository.getFavoriteCocktails();
-        if (result.getValue() != null) {
-            switch (result.getValue().status) {
-                case SUCCESS:
-                    Log.d(TAG, "getFavoriteCocktails: success");
-                    return result;
-                case LOADING:
-
-                    Log.d(TAG, "getFavoriteCocktails: loading");
-                    break;
-                case ERROR:
-                    Log.d(TAG, "getFavoriteCocktails: " + result.getValue().message);
-                    break;
-            }
-        }
-
-        return result;
+        return cocktailRepository.getFavoriteCocktails();
     }
 
     //Get searched cocktails
@@ -89,10 +61,6 @@ public class CocktailViewModel extends AndroidViewModel {
         return result;
     }
 
-    //CRUD
-    public void insert(Cocktail cocktail) {
-        cocktailRepository.insertCocktail(cocktail);
-    }
     public void update(Cocktail cocktail) {
         cocktailRepository.updateCocktail(cocktail);
     }
