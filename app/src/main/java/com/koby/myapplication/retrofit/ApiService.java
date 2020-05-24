@@ -37,7 +37,6 @@ public class ApiService {
                     .baseUrl(BASE_URL)
                     .client(client)
                     .addCallAdapterFactory(new LiveDataCallAdapterFactory())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create());
 
 

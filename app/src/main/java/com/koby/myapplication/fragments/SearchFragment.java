@@ -50,6 +50,7 @@ public class SearchFragment extends BaseFragment {
                                 }
                             }
                         });
+                searchView.clearFocus();
                 return true;
             }
 

@@ -25,7 +25,10 @@ public interface CocktailDao {
     void insert(Cocktail cocktail);
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    long[] insert(Cocktail... cocktail);
+    void insert(List<Cocktail> cocktails);
+
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    long[] insert(Cocktail... cocktails);
 
     @Update()
     int update(Cocktail cocktail);

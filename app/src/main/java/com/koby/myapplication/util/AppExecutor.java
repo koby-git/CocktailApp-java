@@ -17,7 +17,7 @@ public class AppExecutor {
 
     private AppExecutor() {}
 
-    private Executor mDiskIO = Executors.newSingleThreadExecutor();
+    private final Executor mDiskIO = Executors.newSingleThreadExecutor();
     private final Executor mMainThreadExecutor = new MainThreadExecutor();
 
     public Executor diskIO() {

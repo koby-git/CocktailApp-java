@@ -46,27 +46,28 @@ public class CocktailRepository {
             @Override
             protected void saveCallResult(@NonNull CocktailResponse item) {
 
-                AppExecutor.getInstance().diskIO().execute(() -> {
+                for (Cocktail cocktail : item.getCocktails()) {
+                    cocktail.setPopular(true);
+                }
 
-                    if (item.getCocktails() != null) { // recipe list will be null if the api key is expired
-                        Cocktail[] cocktails = new Cocktail[item.getCocktails().size()];
-                        int index = 0;
-                        for (long rowid : cocktailDao.insert((Cocktail[]) (item.getCocktails().toArray(cocktails)))) {
-                            if (rowid == -1) {
-                                Log.d(TAG, "saveCallResult: CONFLICT... This recipe is already in the cache");
-                                // if the recipe already exists... I don't want to set the ingredients or timestamp b/c
-                                // they will be erased
+                if (item.getCocktails() != null) { // recipe list will be null if the api key is expired
+                    Cocktail[] cocktails = new Cocktail[item.getCocktails().size()];
+                    int index = 0;
+                    for (long rowid : cocktailDao.insert((Cocktail[]) (item.getCocktails().toArray(cocktails)))) {
+                        if (rowid == -1) {
+                            Log.d(TAG, "saveCallResult: CONFLICT... This recipe is already in the cache");
+                            // if the recipe already exists... I don't want to set the ingredients or timestamp b/c
+                            // they will be erased
 
-                                cocktailDao.update(cocktails[index].getId()+"",
-                                        cocktails[index].getName(),
-                                        cocktails[index].getImageUri(),
-                                        cocktails[index].getInstruction());
+                            cocktailDao.update(cocktails[index].getId() + "",
+                                    cocktails[index].getName(),
+                                    cocktails[index].getImageUri(),
+                                    cocktails[index].getInstruction());
 
-                                index++;
-                            }
+                            index++;
                         }
                     }
-                });
+                }
             }
 
             @Override

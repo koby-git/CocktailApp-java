@@ -33,6 +33,7 @@ public class CocktailViewModel extends AndroidViewModel {
 
     //Get popular cocktails
     public LiveData<Resource<List<Cocktail>>> getPopularCocktails() {
+        Log.d(TAG, "getPopularCocktails: call");
         return result;
     }
 
