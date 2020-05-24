@@ -36,17 +36,15 @@ public class SearchFragment extends BaseFragment {
                             if (listResource != null) {
                                 switch (listResource.status) {
                                     case SUCCESS:
-                                        Log.d(TAG, "setObserver: SUCCESS");
                                         progressBar.setVisibility(View.INVISIBLE);
                                         adapter.setCocktails(listResource.data);
                                         break;
                                     case LOADING:
                                         progressBar.setVisibility(View.VISIBLE);
-                                        Log.d(TAG, "setObserver: LOADING");
                                         break;
                                     case ERROR:
                                         progressBar.setVisibility(View.INVISIBLE);
-                                        Log.d(TAG, "setObserver: ERROR");
+                                        Log.d(TAG, "setObserver: ERROR - " + listResource.message);
                                 }
                             }
                         });
@@ -63,5 +61,27 @@ public class SearchFragment extends BaseFragment {
     }
 
     @Override
-    public void setObserver() { }
+    public void setObserver() {
+
+        if (cocktailViewModel.getSearchedCocktail() != null) {
+
+            cocktailViewModel.getSearchedCocktail()
+                    .observe(getViewLifecycleOwner(), listResource -> {
+                        if (listResource != null) {
+                            switch (listResource.status) {
+                                case SUCCESS:
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    adapter.setCocktails(listResource.data);
+                                    break;
+                                case LOADING:
+                                    progressBar.setVisibility(View.VISIBLE);
+                                    break;
+                                case ERROR:
+                                    progressBar.setVisibility(View.INVISIBLE);
+                                    Log.d(TAG, "setObserver: ERROR - " + listResource.message);
+                            }
+                        }
+                    });
+        }
+    }
 }

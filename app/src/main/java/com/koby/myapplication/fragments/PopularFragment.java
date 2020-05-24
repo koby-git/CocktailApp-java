@@ -23,6 +23,7 @@ public class PopularFragment extends BaseFragment {
                                 progressBar.setVisibility(View.VISIBLE);
                                 break;
                             case ERROR:
+                                Log.d(TAG, "setObserver: ERROR - " + listResource.message);
                                 progressBar.setVisibility(View.INVISIBLE);
                         }
                     }

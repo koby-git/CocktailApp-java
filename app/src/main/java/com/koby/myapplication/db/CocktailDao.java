@@ -1,7 +1,5 @@
 package com.koby.myapplication.db;
 
-import android.database.Observable;
-
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -12,10 +10,7 @@ import androidx.room.Update;
 
 import com.koby.myapplication.model.Cocktail;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.http.GET;
 
 
 @Dao
@@ -48,12 +43,9 @@ public interface CocktailDao {
     @Query("SELECT * FROM cocktail_table WHERE isFavorite = 1")
     LiveData<List<Cocktail>> getFavoriteCocktails();
 
-    @Query("SELECT * FROM cocktail_table WHERE id = :cocktailId")
-    Cocktail getCocktail(String cocktailId);
-
-    @Query("DELETE FROM cocktail_table")
-    void deleteAll();
-
     @Query("SELECT * FROM cocktail_table WHERE isPopular = 1")
     LiveData<List<Cocktail>> getPopularCocktails();
+
+    @Query("SELECT * FROM cocktail_table WHERE name LIKE '%' || :query || '%' ")
+    LiveData<List<Cocktail>> getSearchedCocktails(String query);
 }

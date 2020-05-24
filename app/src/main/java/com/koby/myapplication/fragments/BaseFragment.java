@@ -9,7 +9,6 @@ import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,7 +30,6 @@ import butterknife.Unbinder;
 import static com.koby.myapplication.activities.CocktailActivity.COCKTAIL;
 
 public abstract class BaseFragment extends Fragment {
-
 
     @BindView(R.id.fragment_recyclerview)
     RecyclerView recyclerView;
@@ -61,8 +59,6 @@ public abstract class BaseFragment extends Fragment {
 
         setCocktailRecyclerView();
         setObserver();
-
-
     }
 
     //Set each fragment observer

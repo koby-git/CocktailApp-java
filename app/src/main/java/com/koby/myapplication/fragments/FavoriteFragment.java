@@ -14,17 +14,15 @@ public class FavoriteFragment extends BaseFragment {
                     if (listResource != null) {
                         switch (listResource.status) {
                             case SUCCESS:
-                                Log.d(TAG, "setObserver: SUCCESS");
                                 progressBar.setVisibility(View.INVISIBLE);
                                 adapter.setCocktails(listResource.data);
                                 break;
                             case LOADING:
                                 progressBar.setVisibility(View.VISIBLE);
-                                Log.d(TAG, "setObserver: LOADING");
                                 break;
                             case ERROR:
                                 progressBar.setVisibility(View.INVISIBLE);
-                                Log.d(TAG, "setObserver: ERROR");
+                                Log.d(TAG, "setObserver: ERROR - " + listResource.message);
                         }
                     }
                 });

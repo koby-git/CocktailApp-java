@@ -1,6 +1,5 @@
 package com.koby.myapplication.retrofit;
 
-
 import androidx.lifecycle.LiveData;
 
 import com.koby.myapplication.model.CocktailResponse;

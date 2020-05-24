@@ -40,16 +40,18 @@ public class CocktailRepository {
 
     //Get popular cocktails from retrofit & cache
     public LiveData<Resource<List<Cocktail>>> getPopularCocktails() {
-
         return new NetworkBoundResource<List<Cocktail>, CocktailResponse>(){
 
             @Override
             protected void saveCallResult(@NonNull CocktailResponse item) {
 
+                //Set cocktail as popular in db
                 for (Cocktail cocktail : item.getCocktails()) {
                     cocktail.setPopular(true);
                 }
 
+                //Insert recipe to db
+                //If already exist replace all except favorite field
                 if (item.getCocktails() != null) { // recipe list will be null if the api key is expired
                     Cocktail[] cocktails = new Cocktail[item.getCocktails().size()];
                     int index = 0;
@@ -102,37 +104,86 @@ public class CocktailRepository {
     }
 
     //Get searched cocktails from retrofit & cache
-    public LiveData<Resource<List<Cocktail>>> getSearchedCocktails(String s) {
+    public LiveData<Resource<List<Cocktail>>> getSearchedCocktails(final String query) {
+        return new NetworkBoundResource<List<Cocktail>,CocktailResponse>(){
+            @Override
+            protected void saveCallResult(@NonNull CocktailResponse item) {
+                cocktailDao.insert(item.getCocktails());
+            }
 
-        MediatorLiveData<Resource<List<Cocktail>>> results = new MediatorLiveData<>();
-        final LiveData<ApiResponse<CocktailResponse>> apiResponse = ApiService.getApiRequest().getCocktails(s);
+            @Override
+            protected boolean shouldFetch(@Nullable List<Cocktail> data) {
+                return true;
+            }
 
-        results.addSource(apiResponse, cocktailResponseApiResponse -> {
-            if (cocktailResponseApiResponse instanceof ApiResponse.ApiSuccessResponse) {
-                CocktailResponse cocktailResponse =
-                        (CocktailResponse) ((ApiResponse.ApiSuccessResponse) cocktailResponseApiResponse).getBody();
+            @NonNull
+            @Override
+            protected LiveData<List<Cocktail>> loadFromDb() {
+                return cocktailDao.getSearchedCocktails(query);
+            }
 
-                AppExecutor.getInstance().diskIO().execute(() -> {
+            @NonNull
+            @Override
+            protected LiveData<ApiResponse<CocktailResponse>> createCall() {
+                return ApiService.getApiRequest().getCocktails(query);
+            }
+        }.getAsLiveData();
 
-                    for (Cocktail cocktail : cocktailResponse.getCocktails()){
-                        Cocktail cacheCocktail = cocktailDao.getCocktail(cocktail.getId()+"");
 
-                        if (cacheCocktail != null){
-                            if (cacheCocktail.isFavorite()) {
-                                cocktail.setFavorite(true);
-                            }
-                            if (cacheCocktail.isPopular()){
-                                cocktail.setPopular(true);
-                            }
-                        }
-                    }
-                });
-                
-                results.setValue(Resource.success(cocktailResponse.getCocktails()));
-            } else if (cocktailResponseApiResponse instanceof ApiResponse.ApiEmptyResponse) {
-            } else if (cocktailResponseApiResponse instanceof ApiResponse.ApiErrorResponse) { }
-        });
-        return results;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Old version//
+
+//        MediatorLiveData<Resource<List<Cocktail>>> results = new MediatorLiveData<>();
+//        final LiveData<ApiResponse<CocktailResponse>> apiResponse = ApiService.getApiRequest().getCocktails(s);
+//
+//        results.addSource(apiResponse, cocktailResponseApiResponse -> {
+//            if (cocktailResponseApiResponse instanceof ApiResponse.ApiSuccessResponse) {
+//                CocktailResponse cocktailResponse =
+//                        (CocktailResponse) ((ApiResponse.ApiSuccessResponse) cocktailResponseApiResponse).getBody();
+//
+//                AppExecutor.getInstance().diskIO().execute(() -> {
+//
+//                    for (Cocktail cocktail : cocktailResponse.getCocktails()){
+//                        Cocktail cacheCocktail = cocktailDao.getCocktail(cocktail.getId()+"");
+//
+//                        if (cacheCocktail != null){
+//                            if (cacheCocktail.isFavorite()) {
+//                                cocktail.setFavorite(true);
+//                            }
+//                            if (cacheCocktail.isPopular()){
+//                                cocktail.setPopular(true);
+//                            }
+//                        }
+//                    }
+//                });
+//
+//                results.setValue(Resource.success(cocktailResponse.getCocktails()));
+//            } else if (cocktailResponseApiResponse instanceof ApiResponse.ApiEmptyResponse) {
+//            } else if (cocktailResponseApiResponse instanceof ApiResponse.ApiErrorResponse) { }
+//        });
+//        return results;
     }
 
     public void updateCocktail(Cocktail cocktail) {

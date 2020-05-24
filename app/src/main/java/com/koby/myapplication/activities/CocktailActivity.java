@@ -47,9 +47,9 @@ public class CocktailActivity extends AppCompatActivity {
 
         cocktailInstruction.setText(cocktail.getInstruction());
 
-        cocktailGlass.setText("Glass: " + cocktail.getGlass());
+        cocktailGlass.setText(String.format("Glass: %s", cocktail.getGlass()));
 
-        cocktailTags.setText("Tags: " + cocktail.getTags());
+        cocktailTags.setText(String.format("Tags: %s", cocktail.getTags()));
 
     }
 }
