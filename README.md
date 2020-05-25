@@ -10,7 +10,7 @@ In this project we will build a cocktail app using android architecture componen
 
 libraries:
 
-1.Dagger
+1.Dagger<br/>
 2.Retrofit<br />
 3.Room<br />
 4.Glide<br />
